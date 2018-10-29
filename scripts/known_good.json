@@ -16,19 +16,19 @@
     },
     {
       "name" : "Vulkan-Headers",
-      "url" : "https://github.com/KhronosGroup/Vulkan-Headers.git",
+      "url" : "git@gitlab.khronos.org:vulkan/Vulkan-Headers.git",
       "sub_dir" : "Vulkan-Headers",
       "build_dir" : "Vulkan-Headers/build",
       "install_dir" : "Vulkan-Headers/build/install",
-      "commit" : "aaca7baef0132f5f8c8f89ee07e3a27aca52b59c"
+      "commit" : "d2624e44181186f6313a74418b4bf1ce0110e521"
     },
     {
       "name" : "Vulkan-Loader",
-      "url" : "https://github.com/KhronosGroup/Vulkan-Loader.git",
+      "url" : "git@gitlab.khronos.org:vulkan/Vulkan-Loader.git",
       "sub_dir" : "Vulkan-Loader",
       "build_dir" : "Vulkan-Loader/build",
       "install_dir" : "Vulkan-Loader/build/install",
-      "commit" : "953b0807fd4d9487b9c888539ab3adefa4329820",
+      "commit" : "90f93062689591bd2d86a512c0de4d7602b315d3",
       "deps" : [
         {
           "var_name" : "VULKAN_HEADERS_INSTALL_DIR",
@@ -79,11 +79,11 @@
     },
     {
       "name" : "Vulkan-Tools",
-      "url" : "https://github.com/KhronosGroup/Vulkan-Tools.git",
+      "url" : "git@gitlab.khronos.org:vulkan/Vulkan-Tools.git",
       "sub_dir" : "Vulkan-Tools",
       "build_dir" : "Vulkan-Tools/build",
       "install_dir" : "Vulkan-Tools/build/install",
-      "commit" : "2e8d601de618eddf2bab8597fd140b2824a060b2",
+      "commit" : "84d8d7acfed9614ca6f46770816c4e241339fa15",
       "deps" : [
         {
           "var_name" : "VULKAN_HEADERS_INSTALL_DIR",
