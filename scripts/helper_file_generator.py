@@ -271,6 +271,8 @@ class HelperFileOutputGenerator(OutputGenerator):
             else:
                 decoratedName = '{}/{}'.format(*match.group(2, 3))
         else:
+            # Convert \textrm{foo} to foo
+            source = re.sub(r'\\textrm{(.*?)}', r'\1', source)
             # Matches expressions similar to 'latexmath : [dataSize \over 4]'
             match = re.match(r'latexmath\s*\:\s*\[\s*(\w+)\s*\\over\s*(\d+)\s*\]', source)
             name = match.group(1)
