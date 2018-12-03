@@ -5180,6 +5180,82 @@ TEST_F(VkLayerTest, TemporaryExternalFence) {
     vkDestroyFence(m_device->device(), import_fence, nullptr);
 }
 
+static void PrintMemStats() {
+    #ifdef __linux__
+    std::ifstream statm;
+    statm.open("/proc/self/statm");
+    cout << statm.rdbuf();
+    statm.close();
+    #endif
+}
+
+TEST_F(VkPositiveLayerTest, DescriptorSetLeak) {
+    TEST_DESCRIPTION("Allocate and free a large number of descriptor sets to check for memory leak");
+    ASSERT_NO_FATAL_FAILURE(Init());
+
+    const int n_descriptors = 32;
+    const int n_iterations = 60 * 60 * 60;
+
+    VkDescriptorPoolCreateInfo pool_ci = {};
+    pool_ci.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+    pool_ci.pNext = nullptr;
+    pool_ci.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+    pool_ci.maxSets = n_descriptors;
+    pool_ci.poolSizeCount = 1;
+    VkDescriptorPoolSize pool_size = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 32};
+    pool_ci.pPoolSizes = &pool_size;
+    VkDescriptorPool pool;
+    vkCreateDescriptorPool(m_device->device(), &pool_ci, nullptr, &pool);
+
+    VkDescriptorSetLayoutBinding layout_binding = {};
+    layout_binding.binding = 0;
+    layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    layout_binding.descriptorCount = 1;
+    layout_binding.stageFlags = VK_SHADER_STAGE_ALL;
+    layout_binding.pImmutableSamplers = nullptr;
+
+    VkDescriptorSetLayoutCreateInfo layout_ci = {};
+    layout_ci.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+    layout_ci.pNext = nullptr;
+    layout_ci.flags = 0;
+    layout_ci.bindingCount = 1;
+    layout_ci.pBindings = &layout_binding;
+    VkDescriptorSetLayout set_layout;
+    vkCreateDescriptorSetLayout(m_device->device(), &layout_ci, nullptr, &set_layout);
+
+    VkDescriptorSetAllocateInfo allocate_info = {};
+    allocate_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+    allocate_info.pNext = nullptr;
+    allocate_info.descriptorPool = pool;
+    allocate_info.descriptorSetCount = n_descriptors;
+    VkDescriptorSetLayout set_layouts[n_descriptors];
+    for (uint32_t i = 0; i < n_descriptors; i++) {
+        set_layouts[i] = set_layout;
+    };
+    allocate_info.pSetLayouts = set_layouts;
+
+    PrintMemStats();
+
+    for (uint32_t j = 0; j < n_iterations; j++) {
+        VkDescriptorSet ds[n_descriptors];
+        vkAllocateDescriptorSets(m_device->device(), &allocate_info, ds);
+        vkResetDescriptorPool(m_device->device(), pool, 0);
+    }
+
+    PrintMemStats();
+
+    for (uint32_t j = 0; j < n_iterations; j++) {
+        VkDescriptorSet ds[32];
+        vkAllocateDescriptorSets(m_device->device(), &allocate_info, ds);
+        vkFreeDescriptorSets(m_device->device(), pool, 32, ds);
+    }
+
+    PrintMemStats();
+
+    vkDestroyDescriptorSetLayout(m_device->device(), set_layout, nullptr);
+    vkDestroyDescriptorPool(m_device->device(), pool, nullptr);
+}
+
 TEST_F(VkPositiveLayerTest, SecondaryCommandBufferBarrier) {
     TEST_DESCRIPTION("Add a pipeline barrier in a secondary command buffer");
     ASSERT_NO_FATAL_FAILURE(Init());
