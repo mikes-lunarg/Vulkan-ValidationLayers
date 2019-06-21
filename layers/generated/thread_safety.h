@@ -297,39 +297,39 @@ public:
 
     // Special entry to allow tracking of command pool Reset and Destroy
     counter<VkCommandPool> c_VkCommandPoolContents;
-    counter<VkSamplerYcbcrConversion> c_VkSamplerYcbcrConversion;
-    counter<VkDebugUtilsMessengerEXT> c_VkDebugUtilsMessengerEXT;
-    counter<VkImage> c_VkImage;
-    counter<VkPipelineCache> c_VkPipelineCache;
-    counter<VkPerformanceConfigurationINTEL> c_VkPerformanceConfigurationINTEL;
-    counter<VkBufferView> c_VkBufferView;
     counter<VkAccelerationStructureNV> c_VkAccelerationStructureNV;
-    counter<VkQueryPool> c_VkQueryPool;
+    counter<VkBuffer> c_VkBuffer;
+    counter<VkBufferView> c_VkBufferView;
     counter<VkCommandPool> c_VkCommandPool;
-    counter<VkObjectTableNVX> c_VkObjectTableNVX;
+    counter<VkDebugReportCallbackEXT> c_VkDebugReportCallbackEXT;
+    counter<VkDebugUtilsMessengerEXT> c_VkDebugUtilsMessengerEXT;
+    counter<VkDescriptorPool> c_VkDescriptorPool;
     counter<VkDescriptorSet> c_VkDescriptorSet;
-    counter<VkFence> c_VkFence;
-    counter<VkDisplayKHR> c_VkDisplayKHR;
+    counter<VkDescriptorSetLayout> c_VkDescriptorSetLayout;
     counter<VkDescriptorUpdateTemplate> c_VkDescriptorUpdateTemplate;
     counter<VkDeviceMemory> c_VkDeviceMemory;
-    counter<VkSampler> c_VkSampler;
-    counter<VkValidationCacheEXT> c_VkValidationCacheEXT;
-    counter<VkDescriptorPool> c_VkDescriptorPool;
-    counter<VkDescriptorSetLayout> c_VkDescriptorSetLayout;
-    counter<VkIndirectCommandsLayoutNVX> c_VkIndirectCommandsLayoutNVX;
-    counter<VkSwapchainKHR> c_VkSwapchainKHR;
-    counter<VkSemaphore> c_VkSemaphore;
-    counter<VkBuffer> c_VkBuffer;
+    counter<VkDisplayKHR> c_VkDisplayKHR;
     counter<VkDisplayModeKHR> c_VkDisplayModeKHR;
-    counter<VkDebugReportCallbackEXT> c_VkDebugReportCallbackEXT;
-    counter<VkFramebuffer> c_VkFramebuffer;
-    counter<VkPipeline> c_VkPipeline;
-    counter<VkRenderPass> c_VkRenderPass;
-    counter<VkSurfaceKHR> c_VkSurfaceKHR;
-    counter<VkShaderModule> c_VkShaderModule;
-    counter<VkImageView> c_VkImageView;
-    counter<VkPipelineLayout> c_VkPipelineLayout;
     counter<VkEvent> c_VkEvent;
+    counter<VkFence> c_VkFence;
+    counter<VkFramebuffer> c_VkFramebuffer;
+    counter<VkImage> c_VkImage;
+    counter<VkImageView> c_VkImageView;
+    counter<VkIndirectCommandsLayoutNVX> c_VkIndirectCommandsLayoutNVX;
+    counter<VkObjectTableNVX> c_VkObjectTableNVX;
+    counter<VkPerformanceConfigurationINTEL> c_VkPerformanceConfigurationINTEL;
+    counter<VkPipeline> c_VkPipeline;
+    counter<VkPipelineCache> c_VkPipelineCache;
+    counter<VkPipelineLayout> c_VkPipelineLayout;
+    counter<VkQueryPool> c_VkQueryPool;
+    counter<VkRenderPass> c_VkRenderPass;
+    counter<VkSampler> c_VkSampler;
+    counter<VkSamplerYcbcrConversion> c_VkSamplerYcbcrConversion;
+    counter<VkSemaphore> c_VkSemaphore;
+    counter<VkShaderModule> c_VkShaderModule;
+    counter<VkSurfaceKHR> c_VkSurfaceKHR;
+    counter<VkSwapchainKHR> c_VkSwapchainKHR;
+    counter<VkValidationCacheEXT> c_VkValidationCacheEXT;
 
 
 #else   // DISTINCT_NONDISPATCHABLE_HANDLES
@@ -347,39 +347,39 @@ public:
           c_VkCommandPoolContents("VkCommandPool", VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_POOL_EXT, &report_data),
 
 #ifdef DISTINCT_NONDISPATCHABLE_HANDLES
-          c_VkSamplerYcbcrConversion("VkSamplerYcbcrConversion", VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION_EXT, &report_data),
-          c_VkDebugUtilsMessengerEXT("VkDebugUtilsMessengerEXT", VK_DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT, &report_data),
-          c_VkImage("VkImage", VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, &report_data),
-          c_VkPipelineCache("VkPipelineCache", VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_CACHE_EXT, &report_data),
-          c_VkPerformanceConfigurationINTEL("VkPerformanceConfigurationINTEL", VK_DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT, &report_data),
-          c_VkBufferView("VkBufferView", VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_VIEW_EXT, &report_data),
           c_VkAccelerationStructureNV("VkAccelerationStructureNV", VK_DEBUG_REPORT_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV_EXT, &report_data),
-          c_VkQueryPool("VkQueryPool", VK_DEBUG_REPORT_OBJECT_TYPE_QUERY_POOL_EXT, &report_data),
+          c_VkBuffer("VkBuffer", VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT, &report_data),
+          c_VkBufferView("VkBufferView", VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_VIEW_EXT, &report_data),
           c_VkCommandPool("VkCommandPool", VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_POOL_EXT, &report_data),
-          c_VkObjectTableNVX("VkObjectTableNVX", VK_DEBUG_REPORT_OBJECT_TYPE_OBJECT_TABLE_NVX_EXT, &report_data),
+          c_VkDebugReportCallbackEXT("VkDebugReportCallbackEXT", VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT, &report_data),
+          c_VkDebugUtilsMessengerEXT("VkDebugUtilsMessengerEXT", VK_DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT, &report_data),
+          c_VkDescriptorPool("VkDescriptorPool", VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_POOL_EXT, &report_data),
           c_VkDescriptorSet("VkDescriptorSet", VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT, &report_data),
-          c_VkFence("VkFence", VK_DEBUG_REPORT_OBJECT_TYPE_FENCE_EXT, &report_data),
-          c_VkDisplayKHR("VkDisplayKHR", VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_KHR_EXT, &report_data),
+          c_VkDescriptorSetLayout("VkDescriptorSetLayout", VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT_EXT, &report_data),
           c_VkDescriptorUpdateTemplate("VkDescriptorUpdateTemplate", VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_EXT, &report_data),
           c_VkDeviceMemory("VkDeviceMemory", VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT, &report_data),
-          c_VkSampler("VkSampler", VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT, &report_data),
-          c_VkValidationCacheEXT("VkValidationCacheEXT", VK_DEBUG_REPORT_OBJECT_TYPE_VALIDATION_CACHE_EXT, &report_data),
-          c_VkDescriptorPool("VkDescriptorPool", VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_POOL_EXT, &report_data),
-          c_VkDescriptorSetLayout("VkDescriptorSetLayout", VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT_EXT, &report_data),
-          c_VkIndirectCommandsLayoutNVX("VkIndirectCommandsLayoutNVX", VK_DEBUG_REPORT_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NVX_EXT, &report_data),
-          c_VkSwapchainKHR("VkSwapchainKHR", VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT, &report_data),
-          c_VkSemaphore("VkSemaphore", VK_DEBUG_REPORT_OBJECT_TYPE_SEMAPHORE_EXT, &report_data),
-          c_VkBuffer("VkBuffer", VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT, &report_data),
+          c_VkDisplayKHR("VkDisplayKHR", VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_KHR_EXT, &report_data),
           c_VkDisplayModeKHR("VkDisplayModeKHR", VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_MODE_KHR_EXT, &report_data),
-          c_VkDebugReportCallbackEXT("VkDebugReportCallbackEXT", VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT, &report_data),
+          c_VkEvent("VkEvent", VK_DEBUG_REPORT_OBJECT_TYPE_EVENT_EXT, &report_data),
+          c_VkFence("VkFence", VK_DEBUG_REPORT_OBJECT_TYPE_FENCE_EXT, &report_data),
           c_VkFramebuffer("VkFramebuffer", VK_DEBUG_REPORT_OBJECT_TYPE_FRAMEBUFFER_EXT, &report_data),
-          c_VkPipeline("VkPipeline", VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT, &report_data),
-          c_VkRenderPass("VkRenderPass", VK_DEBUG_REPORT_OBJECT_TYPE_RENDER_PASS_EXT, &report_data),
-          c_VkSurfaceKHR("VkSurfaceKHR", VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT, &report_data),
-          c_VkShaderModule("VkShaderModule", VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT, &report_data),
+          c_VkImage("VkImage", VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, &report_data),
           c_VkImageView("VkImageView", VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_VIEW_EXT, &report_data),
+          c_VkIndirectCommandsLayoutNVX("VkIndirectCommandsLayoutNVX", VK_DEBUG_REPORT_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NVX_EXT, &report_data),
+          c_VkObjectTableNVX("VkObjectTableNVX", VK_DEBUG_REPORT_OBJECT_TYPE_OBJECT_TABLE_NVX_EXT, &report_data),
+          c_VkPerformanceConfigurationINTEL("VkPerformanceConfigurationINTEL", VK_DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT, &report_data),
+          c_VkPipeline("VkPipeline", VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT, &report_data),
+          c_VkPipelineCache("VkPipelineCache", VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_CACHE_EXT, &report_data),
           c_VkPipelineLayout("VkPipelineLayout", VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_LAYOUT_EXT, &report_data),
-          c_VkEvent("VkEvent", VK_DEBUG_REPORT_OBJECT_TYPE_EVENT_EXT, &report_data)
+          c_VkQueryPool("VkQueryPool", VK_DEBUG_REPORT_OBJECT_TYPE_QUERY_POOL_EXT, &report_data),
+          c_VkRenderPass("VkRenderPass", VK_DEBUG_REPORT_OBJECT_TYPE_RENDER_PASS_EXT, &report_data),
+          c_VkSampler("VkSampler", VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT, &report_data),
+          c_VkSamplerYcbcrConversion("VkSamplerYcbcrConversion", VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION_EXT, &report_data),
+          c_VkSemaphore("VkSemaphore", VK_DEBUG_REPORT_OBJECT_TYPE_SEMAPHORE_EXT, &report_data),
+          c_VkShaderModule("VkShaderModule", VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT, &report_data),
+          c_VkSurfaceKHR("VkSurfaceKHR", VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT, &report_data),
+          c_VkSwapchainKHR("VkSwapchainKHR", VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT, &report_data),
+          c_VkValidationCacheEXT("VkValidationCacheEXT", VK_DEBUG_REPORT_OBJECT_TYPE_VALIDATION_CACHE_EXT, &report_data)
 
 
 #else   // DISTINCT_NONDISPATCHABLE_HANDLES
@@ -393,39 +393,39 @@ WRAPPER(VkDevice)
 WRAPPER(VkInstance)
 WRAPPER(VkQueue)
 #ifdef DISTINCT_NONDISPATCHABLE_HANDLES
-WRAPPER(VkSamplerYcbcrConversion)
-WRAPPER(VkDebugUtilsMessengerEXT)
-WRAPPER(VkImage)
-WRAPPER(VkPipelineCache)
-WRAPPER(VkPerformanceConfigurationINTEL)
-WRAPPER(VkBufferView)
 WRAPPER(VkAccelerationStructureNV)
-WRAPPER(VkQueryPool)
+WRAPPER(VkBuffer)
+WRAPPER(VkBufferView)
 WRAPPER(VkCommandPool)
-WRAPPER(VkObjectTableNVX)
+WRAPPER(VkDebugReportCallbackEXT)
+WRAPPER(VkDebugUtilsMessengerEXT)
+WRAPPER(VkDescriptorPool)
 WRAPPER(VkDescriptorSet)
-WRAPPER(VkFence)
-WRAPPER(VkDisplayKHR)
+WRAPPER(VkDescriptorSetLayout)
 WRAPPER(VkDescriptorUpdateTemplate)
 WRAPPER(VkDeviceMemory)
-WRAPPER(VkSampler)
-WRAPPER(VkValidationCacheEXT)
-WRAPPER(VkDescriptorPool)
-WRAPPER(VkDescriptorSetLayout)
-WRAPPER(VkIndirectCommandsLayoutNVX)
-WRAPPER(VkSwapchainKHR)
-WRAPPER(VkSemaphore)
-WRAPPER(VkBuffer)
+WRAPPER(VkDisplayKHR)
 WRAPPER(VkDisplayModeKHR)
-WRAPPER(VkDebugReportCallbackEXT)
-WRAPPER(VkFramebuffer)
-WRAPPER(VkPipeline)
-WRAPPER(VkRenderPass)
-WRAPPER(VkSurfaceKHR)
-WRAPPER(VkShaderModule)
-WRAPPER(VkImageView)
-WRAPPER(VkPipelineLayout)
 WRAPPER(VkEvent)
+WRAPPER(VkFence)
+WRAPPER(VkFramebuffer)
+WRAPPER(VkImage)
+WRAPPER(VkImageView)
+WRAPPER(VkIndirectCommandsLayoutNVX)
+WRAPPER(VkObjectTableNVX)
+WRAPPER(VkPerformanceConfigurationINTEL)
+WRAPPER(VkPipeline)
+WRAPPER(VkPipelineCache)
+WRAPPER(VkPipelineLayout)
+WRAPPER(VkQueryPool)
+WRAPPER(VkRenderPass)
+WRAPPER(VkSampler)
+WRAPPER(VkSamplerYcbcrConversion)
+WRAPPER(VkSemaphore)
+WRAPPER(VkShaderModule)
+WRAPPER(VkSurfaceKHR)
+WRAPPER(VkSwapchainKHR)
+WRAPPER(VkValidationCacheEXT)
 
 
 #else   // DISTINCT_NONDISPATCHABLE_HANDLES
