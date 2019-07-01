@@ -21,7 +21,7 @@
 #define VULKAN_SHADER_VALIDATION_H
 
 #include <SPIRV/spirv.hpp>
-#include <spirv_tools_commit_id.h>
+#include <generated/spirv_tools_commit_id.h>
 #include "spirv-tools/optimizer.hpp"
 
 // A forward iterator over spirv instructions. Provides easy access to len, opcode, and content words
