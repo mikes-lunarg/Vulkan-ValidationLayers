@@ -81,9 +81,13 @@ before_install:
       curl -L http://llvm.org/svn/llvm-project/cfe/trunk/tools/clang-format/clang-format-diff.py \
            -o scripts/clang-format-diff.py;
     fi
+  # Configure CCache
+  - ccache --version
+  - ccache --zero-stats
+  - ccache --max-size=0
+  - ccache --max-files=0
   # Misc setup
   - export core_count=$(nproc || echo 4) && echo core_count = $core_count
-  - ccache --zero-stats
   - set +e
 
 script:
@@ -186,19 +190,18 @@ script:
       git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git depot_tools
       export PATH=$PATH:$PWD/depot_tools
       ./build-gn/update_deps.sh
-      gn gen out/Debug
+      gn gen out/Debug --args='cc_wrapper="ccache"'
       ninja -C out/Debug
     fi
+  - ccache --show-stats
+  - ccache --max-files=1100
+  - ccache -c
   - ccache --show-stats
   - set +e
 
 notifications:
   email:
     recipients:
-      - cnorthrop@google.com
-      - tobine@google.com
-      - chrisforbes@google.com
-      - shannon@lunarg.com
       - mikes@lunarg.com
     on_success: change
     on_failure: always
