@@ -612,6 +612,11 @@ def main():
         dest='generator',
         help="Set the CMake generator",
         default=None)
+    parser.add_argument(
+        '--cache-install',
+        dest='cache_install',
+        help="Cache install directories for dependencies",
+        default=None)
 
     args = parser.parse_args()
     save_cwd = os.getcwd()
@@ -619,6 +624,9 @@ def main():
     # Create working "top" directory if needed
     distutils.dir_util.mkpath(args.dir)
     abs_top_dir = os.path.abspath(args.dir)
+
+    if args.cache_install:
+        abs_cache_dir = os.path.abspath(args.cache_install)
 
     repos = GetGoodRepos(args)
     repo_dict = {}
@@ -661,12 +669,41 @@ def main():
             if not do_build:
                 continue
 
+        if args.cache_install:
+            cache_path = os.path.join(abs_cache_dir, repo.name)
+            commit_path = os.path.join(cache_path, '.commit')
+            print('Using install cache dir:', cache_path)
+            cache_commit = None
+            if os.path.exists(commit_path):
+                with open(commit_path) as commit_file:
+                    cache_commit = commit_file.read()
+            print('  Looking for:', repo.commit)
+            print('  Found:      ', cache_commit)
+                
+            if cache_commit == repo.commit:
+                print ('  Using install cache instead of clone/build')
+                shutil.rmtree(repo.install_dir, ignore_errors=True)
+                shutil.copytree(cache_path, repo.install_dir)
+                continue
+            else:
+                print ('  Continuing with clone/build')
+
         # Clone/update the repository
         repo.Checkout()
 
         # Build the repository
         if args.do_build and repo.build_step != 'skip':
             repo.Build(repos, repo_dict)
+
+            if args.cache_install:
+                # hack so I don't have to change Vulkan-Tools for now
+                if repo.name == 'Vulkan-Tools':
+                    shutil.copytree(os.path.join(repo.build_dir, 'icd'), os.path.join(repo.install_dir, 'share', 'vulkan', 'icd'))
+                print('Updating install cache dir:', cache_path)
+                shutil.rmtree(cache_path, ignore_errors=True)
+                shutil.copytree(repo.install_dir, cache_path)
+                with open(commit_path, 'w') as commit_file:
+                    commit_file.write(repo.commit)
 
     # Need to restore original cwd in order for CreateHelper to find json file
     os.chdir(save_cwd)

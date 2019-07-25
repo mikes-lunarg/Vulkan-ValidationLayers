@@ -36,7 +36,10 @@ matrix:
     # Check for proper commit message formatting for commits in PR
     - env: CHECK_COMMIT_FORMAT=ON
 
-cache: ccache
+cache:
+  ccache: true
+  directories:
+    - '$HOME/.cache_install'
 
 # Use set -e so that the build fails when a command fails.
 # The default action for Travis-CI is to continue running even if a command fails.
@@ -99,7 +102,7 @@ script:
         # Build master branch when triggered by (daily) cron job
         ${TRAVIS_BUILD_DIR}/scripts/update_deps.py --dir=${TRAVIS_BUILD_DIR}/external --ref=master
       else
-        ${TRAVIS_BUILD_DIR}/scripts/update_deps.py --dir=${TRAVIS_BUILD_DIR}/external
+        ${TRAVIS_BUILD_DIR}/scripts/update_deps.py --dir=${TRAVIS_BUILD_DIR}/external --cache-install=${HOME}/.cache_install
       fi
     fi
   - |
@@ -115,7 +118,7 @@ script:
     if [[ "$VULKAN_BUILD_TARGET" == "LINUX" ]]; then
       # Verify consistency between source file generators and output
       echo Verifying consistency between source file generators and output
-      python3 ${TRAVIS_BUILD_DIR}/scripts/generate_source.py --verify ${TRAVIS_BUILD_DIR}/external/Vulkan-Headers/registry
+      python3 ${TRAVIS_BUILD_DIR}/scripts/generate_source.py --verify ${TRAVIS_BUILD_DIR}/external/Vulkan-Headers/build/install/share/vulkan/registry
     fi
   - |
     if [[ "$VULKAN_BUILD_TARGET" == "LINUX" ]]; then
@@ -152,7 +155,7 @@ script:
       cd ${TRAVIS_BUILD_DIR}
       export LD_LIBRARY_PATH=${TRAVIS_BUILD_DIR}/external/Vulkan-Loader/install/lib:${LD_LIBRARY_PATH}
       export VK_LAYER_PATH=${TRAVIS_BUILD_DIR}/external/VulkanTools/build/layersvt:${TRAVIS_BUILD_DIR}/build/layers
-      export VK_ICD_FILENAMES=${TRAVIS_BUILD_DIR}/external/Vulkan-Tools/build/icd/VkICD_mock_icd.json
+      export VK_ICD_FILENAMES=${TRAVIS_BUILD_DIR}/external/Vulkan-Tools/build/install/share/vulkan/icd/VkICD_mock_icd.json
       build/tests/vk_layer_validation_tests
       for profile in tests/device_profiles/*.json
       do

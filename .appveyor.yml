@@ -22,6 +22,9 @@ environment:
   PYTHON_PACKAGE_PATH: "C:/Python35/Scripts"
   CMAKE_URL: "http://cmake.org/files/v3.10/cmake-3.10.2-win64-x64.zip"
 
+cache:
+  - C:\cache_install -> .appveyor.yml
+
 branches:
   only:
     - master
@@ -43,9 +46,9 @@ before_build:
   - cd %APPVEYOR_BUILD_FOLDER%/external/googletest
   - git checkout tags/release-1.8.1
   - cd %APPVEYOR_BUILD_FOLDER%
-  - python scripts/update_deps.py --dir=external --arch=%PLATFORM% --config=%CONFIGURATION% 
+  - python scripts/update_deps.py --dir=external --arch=%PLATFORM% --config=%CONFIGURATION% --cache-install=C:\cache_install\%PLATFORM%_%CONFIGURATION%
   - echo Verifying consistency between source file generators and output
-  - python scripts/generate_source.py --verify external/Vulkan-Headers/registry
+  - python scripts/generate_source.py --verify external/Vulkan-Headers/build/install/share/vulkan/registry
   - echo Generating Vulkan-ValidationLayers CMake files for %PLATFORM% %CONFIGURATION%
   - mkdir build
   - cd build
