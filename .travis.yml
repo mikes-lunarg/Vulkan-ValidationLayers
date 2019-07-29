@@ -156,11 +156,11 @@ script:
       export LD_LIBRARY_PATH=${TRAVIS_BUILD_DIR}/external/Vulkan-Loader/install/lib:${LD_LIBRARY_PATH}
       export VK_LAYER_PATH=${TRAVIS_BUILD_DIR}/external/VulkanTools/build/layersvt:${TRAVIS_BUILD_DIR}/build/layers
       export VK_ICD_FILENAMES=${TRAVIS_BUILD_DIR}/external/Vulkan-Tools/build/install/share/vulkan/icd/VkICD_mock_icd.json
-      build/tests/vk_layer_validation_tests
+      build/tests/vk_layer_validation_tests > /dev/null
       for profile in tests/device_profiles/*.json
       do
         echo Testing with profile $profile
-        VK_DEVSIM_FILENAME=$profile build/tests/vk_layer_validation_tests --devsim
+        VK_DEVSIM_FILENAME=$profile build/tests/vk_layer_validation_tests --devsim > /dev/null
       done
     fi
   - |
