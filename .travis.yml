@@ -159,6 +159,7 @@ script:
       cd ${TRAVIS_BUILD_DIR}/external
       git clone https://github.com/KhronosGroup/Vulkan-Tools.git
       cd Vulkan-Tools
+      git checkout locke_icd_memory_size
       mkdir build
       cd build
       cmake -DCMAKE_BUILD_TYPE=Debug \
