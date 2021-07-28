@@ -274,7 +274,7 @@ if(BUILD_TESTS OR BUILD_LAYERS)
         message(STATUS "Using glslang install located at ${GLSLANG_INSTALL_DIR}")
         set(GLSLANG_SEARCH_PATH "${GLSLANG_INSTALL_DIR}/lib")
         set(GLSLANG_DEBUG_SEARCH_PATH "${GLSLANG_INSTALL_DIR}/lib")
-        set(GLSLANG_SPIRV_INCLUDE_DIR "${GLSLANG_INSTALL_DIR}/include/glslang" CACHE PATH "Path to glslang spirv headers")
+        set(GLSLANG_INCLUDE_DIR "${GLSLANG_INSTALL_DIR}/include" CACHE PATH "Path to glslang headers")
         set(SPIRV_HEADERS_INCLUDE_DIR "${SPIRV_HEADERS_INSTALL_DIR}/include" CACHE PATH "Path to spirv-headers")
 
         set(GLSLANG_LIBRARIES glslang OGLCompiler OSDependent MachineIndependent GenericCodeGen HLSL SPIRV SPVRemapper)
@@ -301,7 +301,7 @@ if(BUILD_TESTS OR BUILD_LAYERS)
                                              "${GLSLANG_LIBRARIES}")
         endforeach()
     else()
-        set(GLSLANG_SPIRV_INCLUDE_DIR "${glslang_SOURCE_DIR}" CACHE PATH "Path to glslang spirv headers")
+        set(GLSLANG_INCLUDE_DIR "${glslang_SOURCE_DIR}" CACHE PATH "Path to glslang headers")
         set(GLSLANG_LIBRARIES glslang SPIRV SPVRemapper)
     endif()
 
@@ -324,28 +324,7 @@ if(BUILD_TESTS OR BUILD_LAYERS)
         find_library(SPIRV_TOOLS_LIB NAMES SPIRV-Tools HINTS ${SPIRV_TOOLS_SEARCH_PATH})
         find_library(SPIRV_TOOLS_OPT_LIB NAMES SPIRV-Tools-opt HINTS ${SPIRV_TOOLS_OPT_SEARCH_PATH})
 
-        if(WIN32)
-            add_library(SPIRV-Tools-opt STATIC IMPORTED)
-            add_library(SPIRV-Tools STATIC IMPORTED)
-
-            find_library(SPIRV_TOOLS_DLIB NAMES SPIRV-Toolsd HINTS ${SPIRV_TOOLS_DEBUG_SEARCH_PATH})
-            find_library(SPIRV_TOOLS_OPT_DLIB NAMES SPIRV-Tools-optd HINTS ${SPIRV_TOOLS_OPT_DEBUG_SEARCH_PATH})
-
-            set_target_properties(SPIRV-Tools
-                                  PROPERTIES IMPORTED_LOCATION
-                                             "${SPIRV_TOOLS_LIB}"
-                                             IMPORTED_LOCATION_DEBUG
-                                             "${SPIRV_TOOLS_DLIB}")
-            set_target_properties(SPIRV-Tools-opt
-                                  PROPERTIES IMPORTED_LOCATION
-                                             "${SPIRV_TOOLS_OPT_LIB}"
-                                             IMPORTED_LOCATION_DEBUG
-                                             "${SPIRV_TOOLS_OPT_DLIB}")
-
-            set(SPIRV_TOOLS_LIBRARIES SPIRV-Tools-opt SPIRV-Tools)
-        else()
-            set(SPIRV_TOOLS_LIBRARIES ${SPIRV_TOOLS_OPT_LIB} ${SPIRV_TOOLS_LIB})
-        endif()
+        set(SPIRV_TOOLS_LIBRARIES ${SPIRV_TOOLS_OPT_LIB} ${SPIRV_TOOLS_LIB})
     else()
         set(SPIRV_TOOLS_LIBRARIES SPIRV-Tools SPIRV-Tools-opt)
         set(SPIRV_TOOLS_INCLUDE_DIR "${spirv-tools_SOURCE_DIR}/include" CACHE PATH "Path to spirv tools headers")

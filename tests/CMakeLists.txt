@@ -114,7 +114,7 @@ target_include_directories(vk_layer_validation_tests
                            PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
                                   ${PROJECT_SOURCE_DIR}/layers
                                   ${PROJECT_SOURCE_DIR}/layers/generated
-                                  ${GLSLANG_SPIRV_INCLUDE_DIR}
+                                  ${GLSLANG_INCLUDE_DIR}
                                   ${SPIRV_TOOLS_INCLUDE_DIR}
                                   ${SPIRV_HEADERS_INCLUDE_DIR}
                                   ${CMAKE_CURRENT_BINARY_DIR}
