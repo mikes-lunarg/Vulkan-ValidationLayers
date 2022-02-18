@@ -24,6 +24,11 @@
 
 #include "vk_layer_logging.h"
 #include "core_validation.h"
+#ifndef VK_ENABLE_BETA_EXTENSIONS
+    static const VkQueueFlags VK_QUEUE_VIDEO_DECODE_BIT_KHR = 0x00000020;
+    static const VkQueueFlags VK_QUEUE_VIDEO_ENCODE_BIT_KHR = 0x00000040;
+#endif
+
 
 static const std::array<const char *, CMD_RANGE_SIZE> kGeneratedMustBeRecordingList = {{
     kVUIDUndefined,

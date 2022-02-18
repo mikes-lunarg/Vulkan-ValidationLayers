@@ -4041,6 +4041,7 @@ bool CoreChecks::VerifyWriteUpdateContents(const DescriptorSet *dest_set, const 
                         }
                     }
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
                     // Verify portability
                     auto sampler_state = Get<SAMPLER_STATE>(sampler);
                     if (sampler_state) {
@@ -4052,6 +4053,7 @@ bool CoreChecks::VerifyWriteUpdateContents(const DescriptorSet *dest_set, const 
                             }
                         }
                     }
+#endif
                 }
             }
         }

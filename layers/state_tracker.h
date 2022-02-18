@@ -1233,7 +1233,9 @@ class ValidationStateTracker : public ValidationObject {
         VkPhysicalDeviceSampleLocationsPropertiesEXT sample_locations_props;
         VkPhysicalDeviceCustomBorderColorPropertiesEXT custom_border_color_props;
         VkPhysicalDeviceMultiviewProperties multiview_props;
+#ifdef VK_ENABLE_BETA_EXTENSIONS
         VkPhysicalDevicePortabilitySubsetPropertiesKHR portability_props;
+#endif
         VkPhysicalDeviceFragmentShadingRatePropertiesKHR fragment_shading_rate_props;
         VkPhysicalDeviceProvokingVertexPropertiesEXT provoking_vertex_props;
         VkPhysicalDeviceMultiDrawPropertiesEXT multi_draw_props;

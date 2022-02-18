@@ -164,6 +164,11 @@ class CommandValidationOutputGenerator(OutputGenerator):
         if self.source_file:
             write('#include "vk_layer_logging.h"', file=self.outFile)
             write('#include "core_validation.h"', file=self.outFile)
+            write(Outdent('''
+                          #ifndef VK_ENABLE_BETA_EXTENSIONS
+                              static const VkQueueFlags VK_QUEUE_VIDEO_DECODE_BIT_KHR = 0x00000020;
+                              static const VkQueueFlags VK_QUEUE_VIDEO_ENCODE_BIT_KHR = 0x00000040;
+                          #endif'''), file=self.outFile)
         elif self.header_file:
             write('#pragma once', file=self.outFile)
             write('#include <array>', file=self.outFile)

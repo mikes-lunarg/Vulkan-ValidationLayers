@@ -2015,6 +2015,7 @@ bool CoreChecks::PreCallValidateCreateImage(VkDevice device, const VkImageCreate
 
     skip |= ValidateImageFormatFeatures(pCreateInfo);
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     // Check compatibility with VK_KHR_portability_subset
     if (IsExtEnabled(device_extensions.vk_khr_portability_subset)) {
         if (VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT & pCreateInfo->flags &&
@@ -2029,6 +2030,7 @@ bool CoreChecks::PreCallValidateCreateImage(VkDevice device, const VkImageCreate
                          "vkCreateImage (portability error): Cannot create an image with samples/texel > 1 && arrayLayers != 1");
         }
     }
+#endif
 
     const auto external_memory_create_info_nv = LvlFindInChain<VkExternalMemoryImageCreateInfoNV>(pCreateInfo->pNext);
     const auto external_memory_create_info = LvlFindInChain<VkExternalMemoryImageCreateInfo>(pCreateInfo->pNext);
@@ -5996,6 +5998,7 @@ bool CoreChecks::PreCallValidateCreateImageView(VkDevice device, const VkImageVi
             }
         }
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
         if (IsExtEnabled(device_extensions.vk_khr_portability_subset)) {
             // If swizzling is disabled, make sure it isn't used
             // NOTE: as of spec version 1.2.183, VUID 04465 states: "all elements of components _must_ be
@@ -6023,6 +6026,7 @@ bool CoreChecks::PreCallValidateCreateImageView(VkDevice device, const VkImageVi
                                  " the same number of components and bits per component as the Image's format");
             }
         }
+#endif
 
         auto image_view_min_lod = LvlFindInChain<VkImageViewMinLodCreateInfoEXT>(pCreateInfo->pNext);
         if (image_view_min_lod) {

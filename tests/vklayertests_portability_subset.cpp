@@ -16,6 +16,7 @@
 #include "layer_validation_tests.h"
 #include "core_validation_error_enums.h"
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
 class VkPortabilitySubsetTest : public VkLayerTest {
   public:
     void InitPortabilitySubsetFramework() {
@@ -703,3 +704,4 @@ TEST_F(VkPortabilitySubsetTest, ShaderValidation) {
         m_errorMonitor->VerifyFound();
     }
 }
+#endif

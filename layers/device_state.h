@@ -63,7 +63,9 @@ struct DeviceFeatures {
     VkPhysicalDeviceCustomBorderColorFeaturesEXT custom_border_color_features;
     VkPhysicalDeviceExtendedDynamicStateFeaturesEXT extended_dynamic_state_features;
     VkPhysicalDeviceMultiviewFeatures multiview_features;
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     VkPhysicalDevicePortabilitySubsetFeaturesKHR portability_subset_features;
+#endif
     VkPhysicalDeviceFragmentShadingRateFeaturesKHR fragment_shading_rate_features;
     VkPhysicalDeviceShaderIntegerFunctions2FeaturesINTEL shader_integer_functions2_features;
     VkPhysicalDeviceShaderSMBuiltinsFeaturesNV shader_sm_builtins_features;

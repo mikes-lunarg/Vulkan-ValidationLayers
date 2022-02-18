@@ -12271,6 +12271,7 @@ TEST_F(VkLayerTest, InvalidImageCreateFlagWithPhysicalDeviceCount) {
     m_errorMonitor->VerifyFound();
 }
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
 TEST_F(VkLayerTest, ValidateGetPhysicalDeviceVideoFormatProperties) {
     TEST_DESCRIPTION("Validate getting physical device video format properties.");
 
@@ -12304,6 +12305,7 @@ TEST_F(VkLayerTest, ValidateGetPhysicalDeviceVideoFormatProperties) {
     vkGetPhysicalDeviceVideoFormatPropertiesKHR(gpu(), &video_format_info, &count, nullptr);
     m_errorMonitor->VerifyFound();
 }
+#endif
 
 TEST_F(VkLayerTest, QueueSubmitWaitingSameSemaphore) {
     TEST_DESCRIPTION("Submit to queue with waitSemaphore that another queue is already waiting on.");
@@ -12854,6 +12856,7 @@ TEST_F(VkLayerTest, ValidateBeginQueryQueryPoolType) {
     }
 }
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
 TEST_F(VkLayerTest, GetQueryPoolResultsFlags) {
     TEST_DESCRIPTION("Test GetQueryPoolResults with invalid pData and stride");
     SetTargetApiVersion(VK_API_VERSION_1_1);
@@ -12887,7 +12890,9 @@ TEST_F(VkLayerTest, GetQueryPoolResultsFlags) {
     vk::GetQueryPoolResults(m_device->device(), query_pool.handle(), 0, 1, out_data_size, data + 1, 4, flags);
     m_errorMonitor->VerifyFound();
 }
+#endif
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
 TEST_F(VkLayerTest, QueryPoolResultStatusOnly) {
     TEST_DESCRIPTION("Request result status only query result.");
 
@@ -12923,6 +12928,7 @@ TEST_F(VkLayerTest, QueryPoolResultStatusOnly) {
 
     vk::DestroyQueryPool(m_device->handle(), query_pool, NULL);
 }
+#endif
 
 TEST_F(VkLayerTest, CopyUnboundAccelerationStructure) {
     TEST_DESCRIPTION("Test CmdCopyQueryPoolResults with unsupported query type");

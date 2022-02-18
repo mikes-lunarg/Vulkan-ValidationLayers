@@ -991,6 +991,7 @@ bool CoreChecks::ValidateShaderStageInputOutputLimits(SHADER_MODULE_STATE const 
                              "exceeds component limit VkPhysicalDeviceLimits::maxTessellationEvaluationOutputComponents (%u)",
                              limits.maxTessellationEvaluationOutputComponents);
             }
+#ifdef VK_ENABLE_BETA_EXTENSIONS
             // Portability validation
             if (IsExtEnabled(device_extensions.vk_khr_portability_subset)) {
                 if (is_iso_lines && (VK_FALSE == enabled_features.portability_subset_features.tessellationIsolines)) {
@@ -1004,6 +1005,7 @@ bool CoreChecks::ValidateShaderStageInputOutputLimits(SHADER_MODULE_STATE const 
                                      " is using abstract patch type PointMode, but this is not supported on this platform");
                 }
             }
+#endif
             break;
 
         case VK_SHADER_STAGE_GEOMETRY_BIT:

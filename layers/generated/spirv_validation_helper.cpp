@@ -722,6 +722,7 @@ bool CoreChecks::ValidateShaderCapabilitiesAndExtensions(spirv_inst_iter& insn) 
                 "vkCreateShaderModule(): The SPIR-V Capability (%s) was declared, but none of the requirements were met to use it.", string_SpvCapability(insn.word(1)));
         }
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
         // Portability checks
         if (IsExtEnabled(device_extensions.vk_khr_portability_subset)) {
             if ((VK_FALSE == enabled_features.portability_subset_features.shaderSampleRateInterpolationFunctions) &&
@@ -731,6 +732,7 @@ bool CoreChecks::ValidateShaderCapabilitiesAndExtensions(spirv_inst_iter& insn) 
                                     "by this platform");
             }
         }
+#endif
     } else if (insn.opcode() == spv::OpExtension) {
         static const std::string spv_prefix = "SPV_";
         std::string extension_name = (char const *)&insn.word(1);

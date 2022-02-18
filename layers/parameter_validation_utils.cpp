@@ -4735,6 +4735,7 @@ bool StatelessValidation::manual_PreCallValidateGetPhysicalDeviceImageFormatProp
     return skip;
 }
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
 bool StatelessValidation::manual_PreCallValidateGetPhysicalDeviceVideoFormatPropertiesKHR(
     VkPhysicalDevice physicalDevice, const VkPhysicalDeviceVideoFormatInfoKHR *pVideoFormatInfo,
     uint32_t *pVideoFormatPropertyCount, VkVideoFormatPropertiesKHR *pVideoFormatProperties) const {
@@ -4750,6 +4751,7 @@ bool StatelessValidation::manual_PreCallValidateGetPhysicalDeviceVideoFormatProp
 
     return skip;
 }
+#endif
 
 bool StatelessValidation::manual_PreCallValidateCmdCopyBuffer(VkCommandBuffer commandBuffer, VkBuffer srcBuffer, VkBuffer dstBuffer,
                                                               uint32_t regionCount, const VkBufferCopy *pRegions) const {
@@ -8201,10 +8203,12 @@ bool StatelessValidation::manual_PreCallValidateGetQueryPoolResults(VkDevice dev
                                                                     VkDeviceSize stride, VkQueryResultFlags flags) const {
     bool skip = false;
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     if ((flags & VK_QUERY_RESULT_WITH_STATUS_BIT_KHR) && (flags & VK_QUERY_RESULT_WITH_AVAILABILITY_BIT)) {
         skip |= LogError(device, "VUID-vkGetQueryPoolResults-flags-04811",
                          "vkGetQueryPoolResults(): flags include both VK_QUERY_RESULT_WITH_STATUS_BIT_KHR bit and VK_QUERY_RESULT_WITH_AVAILABILITY_BIT bit.");
     }
+#endif
 
     return skip;
 }

@@ -1519,11 +1519,12 @@ class StatelessValidation : public ValidationObject {
                                                                       VkImageType type, VkImageTiling tiling,
                                                                       VkImageUsageFlags usage, VkImageCreateFlags flags,
                                                                       VkImageFormatProperties *pImageFormatProperties) const;
-
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     bool manual_PreCallValidateGetPhysicalDeviceVideoFormatPropertiesKHR(VkPhysicalDevice physicalDevice,
                                                                          const VkPhysicalDeviceVideoFormatInfoKHR *pVideoFormatInfo,
                                                                          uint32_t *pVideoFormatPropertyCount,
                                                                          VkVideoFormatPropertiesKHR *pVideoFormatProperties) const;
+#endif
 
     bool manual_PreCallValidateCmdCopyBuffer(VkCommandBuffer commandBuffer, VkBuffer srcBuffer, VkBuffer dstBuffer,
                                              uint32_t regionCount, const VkBufferCopy *pRegions) const;

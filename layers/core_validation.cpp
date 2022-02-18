@@ -1538,7 +1538,7 @@ bool CoreChecks::ValidatePipelineLocked(std::vector<std::shared_ptr<PIPELINE_STA
                              "Invalid Pipeline CreateInfo[%d]: base pipeline does not allow derivatives.", pipelineIndex);
         }
     }
-
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     // Check for portability errors
     if (IsExtEnabled(device_extensions.vk_khr_portability_subset)) {
         if ((VK_FALSE == enabled_features.portability_subset_features.triangleFans) &&
@@ -1586,6 +1586,7 @@ bool CoreChecks::ValidatePipelineLocked(std::vector<std::shared_ptr<PIPELINE_STA
                          "Invalid Pipeline CreateInfo[%d] (portability error): point polygons are not supported", pipelineIndex);
         }
     }
+#endif
 
     return skip;
 }
@@ -5097,6 +5098,7 @@ bool CoreChecks::PreCallValidateGetQueryPoolResults(VkDevice device, VkQueryPool
                                  report_data->FormatHandle(queryPool).c_str(), dataSize);
             }
         }
+#ifdef VK_ENABLE_BETA_EXTENSIONS
         if (query_pool_state->createInfo.queryType == VK_QUERY_TYPE_RESULT_STATUS_ONLY_KHR &&
             (flags & VK_QUERY_RESULT_WITH_STATUS_BIT_KHR) == 0) {
             skip |= LogError(queryPool, "VUID-vkGetQueryPoolResults-queryType-04810",
@@ -5104,6 +5106,7 @@ bool CoreChecks::PreCallValidateGetQueryPoolResults(VkDevice device, VkQueryPool
                              "queryType, but flags do not contain VK_QUERY_RESULT_WITH_STATUS_BIT_KHR bit.",
                              report_data->FormatHandle(queryPool).c_str());
         }
+#endif
     }
 
     return skip;
@@ -5779,6 +5782,7 @@ bool CoreChecks::PreCallValidateCreateGraphicsPipelines(VkDevice device, VkPipel
         skip |= ValidatePipelineVertexDivisors(cgpl_state->pipe_state, count, pCreateInfos);
     }
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     if (IsExtEnabled(device_extensions.vk_khr_portability_subset)) {
         for (uint32_t i = 0; i < count; ++i) {
             // Validate depth-stencil state
@@ -5825,6 +5829,7 @@ bool CoreChecks::PreCallValidateCreateGraphicsPipelines(VkDevice device, VkPipel
             }
         }
     }
+#endif
 
     return skip;
 }
@@ -16831,12 +16836,14 @@ bool CoreChecks::PreCallValidateCreateSampler(VkDevice device, const VkSamplerCr
         }
     }
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     if (IsExtEnabled(device_extensions.vk_khr_portability_subset)) {
         if ((VK_FALSE == enabled_features.portability_subset_features.samplerMipLodBias) && pCreateInfo->mipLodBias != 0) {
             skip |= LogError(device, "VUID-VkSamplerCreateInfo-samplerMipLodBias-04467",
                              "vkCreateSampler (portability error): mip LOD bias not supported.");
         }
     }
+#endif
 
     // If any of addressModeU, addressModeV or addressModeW are VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE, the
     // VK_KHR_sampler_mirror_clamp_to_edge extension or promoted feature must be enabled
@@ -17958,12 +17965,14 @@ bool CoreChecks::PreCallValidateCmdSetStencilOp(VkCommandBuffer commandBuffer, V
 bool CoreChecks::PreCallValidateCreateEvent(VkDevice device, const VkEventCreateInfo *pCreateInfo,
                                             const VkAllocationCallbacks *pAllocator, VkEvent *pEvent) const {
     bool skip = false;
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     if (IsExtEnabled(device_extensions.vk_khr_portability_subset)) {
         if (VK_FALSE == enabled_features.portability_subset_features.events) {
             skip |= LogError(device, "VUID-vkCreateEvent-events-04468",
                              "vkCreateEvent: events are not supported via VK_KHR_portability_subset");
         }
     }
+#endif
     return skip;
 }
 

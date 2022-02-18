@@ -900,6 +900,16 @@ def GenSyncTypeHelper(gen, is_source) :
 
     if config['is_source']:
         lines = ['#include "synchronization_validation_types.h"', '']
+        lines.extend(['#ifndef VK_ENABLE_BETA_EXTENSIONS',
+                      'static const VkPipelineStageFlags2 VK_PIPELINE_STAGE_2_VIDEO_DECODE_BIT_KHR = 0x04000000ULL;',
+                      'static const VkPipelineStageFlags2 VK_PIPELINE_STAGE_2_VIDEO_ENCODE_BIT_KHR = 0x08000000ULL;',
+                      'static const VkAccessFlags2 VK_ACCESS_2_VIDEO_DECODE_READ_BIT_KHR    = 0x800000000ULL;',
+                      'static const VkAccessFlags2 VK_ACCESS_2_VIDEO_DECODE_WRITE_BIT_KHR   = 0x1000000000ULL;',
+                      'static const VkAccessFlags2 VK_ACCESS_2_VIDEO_ENCODE_READ_BIT_KHR    = 0x2000000000ULL;',
+                      'static const VkAccessFlags2 VK_ACCESS_2_VIDEO_ENCODE_WRITE_BIT_KHR   = 0x4000000000ULL;',
+                      'static const VkQueueFlagBits   VK_QUEUE_VIDEO_DECODE_BIT_KHR            = 0x00000020;',
+                      'static const VkQueueFlagBits   VK_QUEUE_VIDEO_ENCODE_BIT_KHR            = 0x00000040;',
+                      '#endif'])
     else:
         lines = ['#pragma once', '', '#include <array>', '#include <bitset>', '#include <map>', '#include <stdint.h>', '#include <vulkan/vulkan.h>',
                  '#include "vk_layer_data.h"']
