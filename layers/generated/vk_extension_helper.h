@@ -601,6 +601,7 @@ struct DeviceExtensions : public InstanceExtensions {
     ExtEnabled vk_qcom_render_pass_store_ops{kNotEnabled};
     ExtEnabled vk_qcom_render_pass_transform{kNotEnabled};
     ExtEnabled vk_qcom_rotated_copy_commands{kNotEnabled};
+    ExtEnabled vk_valve_descriptor_set_host_mapping{kNotEnabled};
     ExtEnabled vk_valve_mutable_descriptor_type{kNotEnabled};
 
     struct DeviceReq {
@@ -1107,6 +1108,7 @@ struct DeviceExtensions : public InstanceExtensions {
             {VK_QCOM_ROTATED_COPY_COMMANDS_EXTENSION_NAME, DeviceInfo(&DeviceExtensions::vk_qcom_rotated_copy_commands, {{
                            {&DeviceExtensions::vk_khr_swapchain, VK_KHR_SWAPCHAIN_EXTENSION_NAME},
                            {&DeviceExtensions::vk_khr_copy_commands2, VK_KHR_COPY_COMMANDS_2_EXTENSION_NAME}}})},
+            {VK_VALVE_DESCRIPTOR_SET_HOST_MAPPING_EXTENSION_NAME, DeviceInfo(&DeviceExtensions::vk_valve_descriptor_set_host_mapping, {})},
             {VK_VALVE_MUTABLE_DESCRIPTOR_TYPE_EXTENSION_NAME, DeviceInfo(&DeviceExtensions::vk_valve_mutable_descriptor_type, {{
                            {&DeviceExtensions::vk_khr_maintenance3, VK_KHR_MAINTENANCE_3_EXTENSION_NAME}}})},
         };
@@ -1524,6 +1526,7 @@ static const std::set<std::string> kDeviceExtensionNames = {
     VK_QCOM_RENDER_PASS_STORE_OPS_EXTENSION_NAME,
     VK_QCOM_RENDER_PASS_TRANSFORM_EXTENSION_NAME,
     VK_QCOM_ROTATED_COPY_COMMANDS_EXTENSION_NAME,
+    VK_VALVE_DESCRIPTOR_SET_HOST_MAPPING_EXTENSION_NAME,
     VK_VALVE_MUTABLE_DESCRIPTOR_TYPE_EXTENSION_NAME,
 };
 
