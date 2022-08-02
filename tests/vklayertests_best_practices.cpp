@@ -1063,6 +1063,9 @@ TEST_F(VkBestPracticesLayerTest, ExpectedQueryDetails) {
     vk::GetPhysicalDeviceQueueFamilyProperties2(phys_device_obj.handle(), &queue_count, nullptr);
 
     queue_family_props2.resize(queue_count);
+    for (uint32_t i = 0; i < queue_count; i++) {
+        queue_family_props2[i].sType = VK_STRUCTURE_TYPE_QUEUE_FAMILY_PROPERTIES_2;
+    }
     vk::GetPhysicalDeviceQueueFamilyProperties2(phys_device_obj.handle(), &queue_count, queue_family_props2.data());
 
     // And for GetPhysicalDeviceQueueFamilyProperties2KHR
@@ -1104,7 +1107,7 @@ TEST_F(VkBestPracticesLayerTest, MissingQueryDetails) {
         }
     }
 
-    VkPhysicalDeviceFeatures all_features;
+    VkPhysicalDeviceFeatures all_features{};
     VkDeviceCreateInfo device_ci = {};
     device_ci.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     device_ci.pNext = nullptr;
@@ -1172,6 +1175,7 @@ TEST_F(VkBestPracticesLayerTest, DepthBiasNoAttachment) {
     vk::CmdDraw(m_commandBuffer->handle(), 3, 1, 0, 0);
     m_errorMonitor->VerifyFound();
 
+    m_commandBuffer->EndRenderPass();
     m_commandBuffer->end();
 }
 
@@ -1252,6 +1256,9 @@ TEST_F(VkBestPracticesLayerTest, CreatePipelineWithoutRenderPass) {
 
     ASSERT_NO_FATAL_FAILURE(InitBestPracticesFramework());
     ASSERT_NO_FATAL_FAILURE(InitState());
+
+    m_errorMonitor->SetUnexpectedError("VUID-VkGraphicsPipelineCreateInfo-renderPass-06603");
+    m_errorMonitor->SetUnexpectedError("VUID-VkGraphicsPipelineCreateInfo-renderPass-06574");
 
     VkShaderObj vs(this, bindStateVertShaderText, VK_SHADER_STAGE_VERTEX_BIT);
     VkShaderObj fs(this, bindStateFragShaderText, VK_SHADER_STAGE_FRAGMENT_BIT);
