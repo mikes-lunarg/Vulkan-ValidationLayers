@@ -4439,13 +4439,16 @@ TEST_F(VkSyncValTest, SyncQSBufferCopyHazards) {
     VkCommandBufferObj cba(m_device, m_commandPool);
     VkCommandBufferObj cbb(m_device, m_commandPool);
 
-    cba.begin();
+    VkCommandBufferBeginInfo begin = LvlInitStruct<VkCommandBufferBeginInfo>();
+    begin.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+
+    cba.begin(&begin);
     const VkCommandBuffer h_cba = cba.handle();
     vk::CmdCopyBuffer(h_cba, buffer_a.handle(), buffer_b.handle(), 1, &region);
     cba.end();
 
     const VkCommandBuffer h_cbb = cbb.handle();
-    cbb.begin();
+    cbb.begin(&begin);
     vk::CmdCopyBuffer(h_cbb, buffer_c.handle(), buffer_a.handle(), 1, &region);
     cbb.end();
 
