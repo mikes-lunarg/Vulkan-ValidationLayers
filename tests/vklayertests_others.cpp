@@ -14423,6 +14423,25 @@ TEST_F(VkLayerTest, IncompatibleRenderPass2) {
     m_commandBuffer->end();
 }
 
+TEST_F(VkLayerTest, GetDeviceProcAddr) {
+    TEST_DESCRIPTION("Validate if vkGetDeviceProcAddr checks enabled extensions properly");
+
+    AddRequiredExtensions(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);  // instance extension
+    AddRequiredExtensions(VK_KHR_PUSH_DESCRIPTOR_EXTENSION_NAME);                   // device extension
+    SetTargetApiVersion(VK_API_VERSION_1_0);
+    ASSERT_NO_FATAL_FAILURE(Init());
+
+    // Instance ext VK_EXT_debug_utils is enabled, vkCmdBeginDebugUtilsLabelEXT is device-dispatched
+    ASSERT_TRUE(vk::GetDeviceProcAddr(m_device->handle(), "vkCmdBeginDebugUtilsLabelEXT") != nullptr);
+    // Device ext VK_KHR_push_descriptor is enabled, vkCmdPushDescriptorSetKHR is device-dispatched
+    ASSERT_TRUE(vk::GetDeviceProcAddr(m_device->handle(), "vkCmdPushDescriptorSetKHR") != nullptr);
+
+    // Instance ext VK_KHR_get_physical_device_properties2 is enabled, but vkGetPhysicalDeviceFeatures2KHR is not device-dispatched
+    ASSERT_TRUE(vk::GetDeviceProcAddr(m_device->handle(), "vkGetPhysicalDeviceFeatures2KHR") == nullptr);
+    // Device ext VK_EXT_full_screen_exclusive is not enabled, even though vkAcquireFullScreenExclusiveModeEXT is device-dispatched
+    ASSERT_TRUE(vk::GetDeviceProcAddr(m_device->handle(), "vkAcquireFullScreenExclusiveModeEXT") == nullptr);
+}
+
 #ifdef VK_USE_PLATFORM_METAL_EXT
 TEST_F(VkLayerTest, ExportMetalObjects) {
     TEST_DESCRIPTION("Test VK_EXT_metal_objects VUIDs");
