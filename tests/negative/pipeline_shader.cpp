@@ -9812,13 +9812,15 @@ TEST_F(VkLayerTest, TestMinAndMaxTexelGatherOffset) {
               ; set up composite to be validated
        %uint = OpTypeInt 32 0
         %int = OpTypeInt 32 1
+     %v2uint = OpTypeVector %uint 2
       %v2int = OpTypeVector %int 2
    %int_n100 = OpConstant %int -100
-  %uint_n100 = OpConstant %uint 4294967196
     %int_100 = OpConstant %int 100
       %int_0 = OpConstant %int 0
+     %uint_0 = OpConstant %uint 0
+   %uint_max = OpConstant %uint 4294967295
  %offset_100 = OpConstantComposite %v2int %int_n100 %int_100
-%offset_n100 = OpConstantComposite %v2int %int_0 %uint_n100
+ %offset_max = OpConstantComposite %v2uint %uint_0 %uint_max
 
                ; Function main
        %main = OpFunction %void None %3
@@ -9828,7 +9830,7 @@ TEST_F(VkLayerTest, TestMinAndMaxTexelGatherOffset) {
                ; Should trigger min and max
          %24 = OpImageGather %v4float %14 %17 %int_0 ConstOffset %offset_100
                ; Should only trigger max since uint
-         %25 = OpImageGather %v4float %14 %17 %int_0 ConstOffset %offset_n100
+         %25 = OpImageGather %v4float %14 %17 %int_0 ConstOffset %offset_max
                OpStore %color %24
                OpReturn
                OpFunctionEnd
@@ -9890,13 +9892,15 @@ TEST_F(VkLayerTest, TestMinAndMaxTexelOffset) {
               ; set up composite to be validated
        %uint = OpTypeInt 32 0
         %int = OpTypeInt 32 1
+     %v2uint = OpTypeVector %uint 2
       %v2int = OpTypeVector %int 2
-      %int_0 = OpConstant %int 0
    %int_n100 = OpConstant %int -100
-  %uint_n100 = OpConstant %uint 4294967196
     %int_100 = OpConstant %int 100
+      %int_0 = OpConstant %int 0
+     %uint_0 = OpConstant %uint 0
+   %uint_max = OpConstant %uint 4294967295
  %offset_100 = OpConstantComposite %v2int %int_n100 %int_100
-%offset_n100 = OpConstantComposite %v2int %int_0 %uint_n100
+ %offset_max = OpConstantComposite %v2uint %uint_0 %uint_max
          %24 = OpConstantComposite %v2int %int_0 %int_0
 
        %main = OpFunction %void None %3
@@ -9907,8 +9911,8 @@ TEST_F(VkLayerTest, TestMinAndMaxTexelOffset) {
     %result0 = OpImageSampleImplicitLod %v4float %14 %17 ConstOffset %offset_100
     %result1 = OpImageFetch %v4float %26 %24 ConstOffset %offset_100
                ; Should only trigger max since uint
-    %result2 = OpImageSampleImplicitLod %v4float %14 %17 ConstOffset %offset_n100
-    %result3 = OpImageFetch %v4float %26 %24 ConstOffset %offset_n100
+    %result2 = OpImageSampleImplicitLod %v4float %14 %17 ConstOffset %offset_max
+    %result3 = OpImageFetch %v4float %26 %24 ConstOffset %offset_max
                OpReturn
                OpFunctionEnd
         )";
