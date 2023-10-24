@@ -1,0 +1,25 @@
+{
+    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+    "name": "vulkan-validationlayers",
+    "version": "1.3.269",
+    "dependencies": [
+        "vulkan-headers",
+        "vulkan-utility-libraries",
+        "spirv-headers",
+        "spirv-tools",
+        "glslang",
+        "robin-hood-hashing"
+    ],
+    "builtin-baseline": "3265c187c74914aa5569b75355badebfdbab7987",
+    "overrides": [
+        {
+            "name": "robin-hood-hashing",
+            "version": "3.11.5"
+        }
+    ],
+    "vcpkg-configuration": {
+        "overlay-ports": [
+            "./ports"
+        ]
+    }
+}
