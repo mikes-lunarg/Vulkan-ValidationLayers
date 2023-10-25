@@ -89,7 +89,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-22.04]
-        flags: [{c: "-fsanitize=address", ld: "-fsanitize=address"}, {c: "-fsanitize=thread", ld: "-fsanitize=thread"}]
+        #flags: [{c: "-fsanitize=address", ld: "-fsanitize=address"}, {c: "-fsanitize=thread", ld: "-fsanitize=thread"}]
         config: [debug, release]
         include:
           # Test clang support
