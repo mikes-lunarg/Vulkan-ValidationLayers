@@ -1,0 +1,19 @@
+name: Header Update
+
+on: workflow_dispatch
+
+jobs:
+  header-update:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+    - uses: actions/checkout@v4
+    - run: python scripts/update-deps.py --dir external --roll-mode latest-tag --roll Vulkan-Headers Vulkan-Loader Vulkan-Utility-Libraries Vulkan-Tools
+    - run: cmake -S . -B build -C external/helper.cmake
+    - run: cmake --build build --target vvl_codegen
+    - run: git checkout -b header_update
+    - run: git commit -a -m header_update
+    - run: git push --force header_update
+    - run: gh pr create --title header_update --body header_update
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

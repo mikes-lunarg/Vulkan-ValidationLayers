@@ -428,6 +428,17 @@ class GoodRepo(object):
         if not os.path.exists(os.path.join(self.repo_dir, '.git')):
             self.Clone()
         self.Fetch()
+
+        if self._args.roll and self.name in self._args.roll:
+            if self._args.roll_mode == 'latest-tag':
+                new_commit = command_output(['git', 'describe', '--tags', '--abbrev=0', 'origin/HEAD'], self.repo_dir).strip()
+            elif self._args.roll_mode == 'latest':
+                new_commit = command_output(['git', 'rev-parse', 'origin/HEAD'], self.repo_dir).strip()
+            if new_commit != self.commit:
+                print(f"Rolling {self.name} from {self.commit} to {new_commit}", flush=True)
+                UpdateRepoCommit(self._args, self.name, new_commit)
+                self.commit = new_commit
+
         if len(self._args.ref):
             command_output(['git', 'checkout', self._args.ref], self.repo_dir)
         else:
@@ -568,6 +579,12 @@ class GoodRepo(object):
     def IsOptional(self, opts):
         return len(self.optional.intersection(opts)) > 0
 
+def GetKnownGoodFile(args):
+    if args.known_good_dir:
+        return os.path.join(os.path.abspath(args.known_good_dir), KNOWN_GOOD_FILE_NAME)
+    else:
+        return os.path.join(os.path.dirname(os.path.abspath(__file__)), KNOWN_GOOD_FILE_NAME)
+
 def GetGoodRepos(args):
     """Returns the latest list of GoodRepo objects.
 
@@ -575,18 +592,23 @@ def GetGoodRepos(args):
     directory as this script unless overridden by the 'known_good_dir'
     parameter.
     """
-    if args.known_good_dir:
-        known_good_file = os.path.join( os.path.abspath(args.known_good_dir),
-            KNOWN_GOOD_FILE_NAME)
-    else:
-        known_good_file = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), KNOWN_GOOD_FILE_NAME)
-    with open(known_good_file) as known_good:
+    with open(GetKnownGoodFile(args)) as known_good:
         return [
             GoodRepo(repo, args)
             for repo in json.loads(known_good.read())['repos']
         ]
 
+def UpdateRepoCommit(args, name, commit):
+    """Updates the commit id for the given repo"""
+    with open(GetKnownGoodFile(args)) as known_good_file:
+        known_good_json = json.load(known_good_file)
+    for repo in known_good_json['repos']:
+        if repo['name'] == name:
+            repo['commit'] = commit
+            break
+    with open(GetKnownGoodFile(args), 'w') as known_good_file:
+        json.dump(known_good_json, known_good_file, indent=4)
+        known_good_file.write('\n')
 
 def GetInstallNames(args):
     """Returns the install names list.
@@ -732,6 +754,17 @@ def main():
         action='store_true',
         help="Build dependencies with ASAN enabled",
         default=False)
+    parser.add_argument(
+        '--roll',
+        dest='roll',
+        action='append',
+        help='Help!')
+    parser.add_argument(
+        '--roll-mode',
+        dest='roll_mode',
+        choices=['latest', 'latest-tag'],
+        default='latest',
+        help='Help!')
 
     args = parser.parse_args()
     save_cwd = os.getcwd()
