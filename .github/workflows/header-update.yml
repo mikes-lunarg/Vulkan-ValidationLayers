@@ -1,0 +1,20 @@
+name: Header Update
+
+on: workflow_dispatch
+
+jobs:
+  header-update:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+    - uses: actions/checkout@v4
+    - run: python scripts/update_deps.py --no-build --dir external --roll-mode latest-tag --roll Vulkan-Headers Vulkan-Loader Vulkan-Utility-Libraries Vulkan-Tools
+    - run: python scripts/generate_source.py external/Vulkan-Headers/registry external/SPIRV-Headers/include/spirv/unified1
+    - run: git config user.name 'github-actions[bot]'
+    - run: git config user.email 'github-actions[bot]@users.noreply.github.com'
+    - run: git checkout -b header_update
+    - run: git commit -a -m header_update
+    - run: git push --force origin header_update
+    - run: gh pr create --title header_update --body header_update
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
