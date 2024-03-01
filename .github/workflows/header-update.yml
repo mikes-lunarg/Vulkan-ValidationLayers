@@ -1,0 +1,77 @@
+name: Header Update
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: 
+      - closed
+    branches:
+      - main
+
+jobs:
+  header-update:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Update known-good
+      id: update
+      run: python scripts/update_deps.py --no-build --dir external --roll-mode latest-tag --roll Vulkan-Headers Vulkan-Loader Vulkan-Utility-Libraries Vulkan-Tools 2>&1 | tee /tmp/update.txt
+    
+    - name: Validate header tag
+      run: |
+        HEADER_VERSION=$(jq -r '.["repos"][] | select(.name=="Vulkan-Headers").commit' scripts/known_good.json)
+        grep -q -P '^v\d\.\d\.\d+$' <<< "$HEADER_VERSION"
+        echo HEADER_VERSION=$HEADER_VERSION >> $GITHUB_ENV
+
+    - name: Generate source
+      id: generate
+      continue-on-error: true
+      run: |
+        python scripts/generate_source.py external/Vulkan-Headers/registry external/SPIRV-Headers/include/spirv/unified1 2>&1 | tee -a /tmp/generate.txt
+        python scripts/vk_validation_stats.py external/Vulkan-Headers/registry/validusage.json -spirvtools external/SPIRV-Tools -summary -c 2>&1 | tee -a /tmp/generate.txt
+
+    - name: Commit
+      run: |
+        git config user.name 'github-actions[bot]'
+        git config user.email 'github-actions[bot]@users.noreply.github.com'
+        git checkout -b gha-header-update-$HEADER_VERSION
+        git commit -a -m "build: Update to header $HEADER_VERSION"
+        git push --force origin gha-header-update-$HEADER_VERSION
+
+    - name: Open PR
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh pr create --fill --body-file - << EOF
+        ### Update known-good.json
+        ~~~
+        $(cat /tmp/update.txt)
+        ~~~
+        ### Generate source
+        ~~~
+        $(cat /tmp/generate.txt)
+        ~~~
+        header-tag:$HEADER_VERSION
+        EOF
+
+  header-tag:
+    if: |
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.merged &&
+      contains(github.event.pull_request.body, 'header-tag:')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - name: Tag repo
+        run: |
+          cat << EOF > /tmp/pr_body.md
+          ${{github.event.pull_request.body}}
+          EOF
+          HEADER_TAG=$(grep -oP 'header-tag:\K.*' /tmp/pr_body.md)
+          git tag $HEADER_TAG ${{github.event.pull_request.merge_commit_sha}}
+          git push origin $HEADER_TAG
