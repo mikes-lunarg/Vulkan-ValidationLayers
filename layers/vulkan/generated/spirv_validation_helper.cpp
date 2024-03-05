@@ -230,8 +230,7 @@ static const std::unordered_multimap<uint32_t, RequiredSpirvInfo> spirvCapabilit
     {spv::CapabilityTextureSampleWeightedQCOM, {0, &DeviceFeatures::textureSampleWeighted, nullptr, ""}},
     {spv::CapabilityTextureBoxFilterQCOM, {0, &DeviceFeatures::textureBoxFilter, nullptr, ""}},
     {spv::CapabilityTextureBlockMatchQCOM, {0, &DeviceFeatures::textureBlockMatch, nullptr, ""}},
-    // Not found in current SPIR-V Headers
-    //    {spv::CapabilityTextureBlockMatch2QCOM, {0, &DeviceFeatures::textureBlockMatch2, nullptr, ""}},
+    {spv::CapabilityTextureBlockMatch2QCOM, {0, &DeviceFeatures::textureBlockMatch2, nullptr, ""}},
     {spv::CapabilityMeshShadingEXT, {0, nullptr, &DeviceExtensions::vk_ext_mesh_shader, ""}},
     {spv::CapabilityRayTracingOpacityMicromapEXT, {0, nullptr, &DeviceExtensions::vk_ext_opacity_micromap, ""}},
     {spv::CapabilityCoreBuiltinsARM, {0, &DeviceFeatures::shaderCoreBuiltins, nullptr, ""}},
@@ -250,6 +249,8 @@ static const std::unordered_multimap<uint32_t, RequiredSpirvInfo> spirvCapabilit
     {spv::CapabilityQuadControlKHR, {0, &DeviceFeatures::shaderQuadControl, nullptr, ""}},
     // Not found in current SPIR-V Headers
     //    {spv::CapabilityMaximallyReconvergesKHR, {0, &DeviceFeatures::shaderMaximalReconvergence, nullptr, ""}},
+    // Not found in current SPIR-V Headers
+    //    {spv::CapabilityRawAccessChainsNV, {0, &DeviceFeatures::shaderRawAccessChains, nullptr, ""}},
 };
 // clang-format on
 
@@ -354,6 +355,7 @@ static const std::unordered_multimap<std::string_view, RequiredSpirvInfo> spirvE
     {"SPV_KHR_expect_assume", {0, nullptr, &DeviceExtensions::vk_khr_shader_expect_assume, ""}},
     {"SPV_KHR_float_controls2", {0, nullptr, &DeviceExtensions::vk_khr_shader_float_controls2, ""}},
     {"SPV_KHR_quad_control", {0, nullptr, &DeviceExtensions::vk_khr_shader_quad_control, ""}},
+    {"SPV_NV_raw_access_chains", {0, nullptr, &DeviceExtensions::vk_nv_raw_access_chains, ""}},
 };
 // clang-format on
 
@@ -603,8 +605,6 @@ static inline const char *string_SpvCapability(uint32_t input_value) {
             return "FragmentShaderPixelInterlockEXT";
         case spv::CapabilityFragmentShaderShadingRateInterlockEXT:
             return "FragmentShaderShadingRateInterlockEXT";
-        case spv::CapabilityDemoteToHelperInvocationEXT:
-            return "DemoteToHelperInvocationEXT";
         case spv::CapabilityFragmentShadingRateKHR:
             return "FragmentShadingRateKHR";
         case spv::CapabilityWorkgroupMemoryExplicitLayoutKHR:
@@ -613,14 +613,6 @@ static inline const char *string_SpvCapability(uint32_t input_value) {
             return "WorkgroupMemoryExplicitLayout8BitAccessKHR";
         case spv::CapabilityWorkgroupMemoryExplicitLayout16BitAccessKHR:
             return "WorkgroupMemoryExplicitLayout16BitAccessKHR";
-        case spv::CapabilityDotProductInputAllKHR:
-            return "DotProductInputAllKHR";
-        case spv::CapabilityDotProductInput4x8BitKHR:
-            return "DotProductInput4x8BitKHR";
-        case spv::CapabilityDotProductInput4x8BitPackedKHR:
-            return "DotProductInput4x8BitPackedKHR";
-        case spv::CapabilityDotProductKHR:
-            return "DotProductKHR";
         case spv::CapabilityFragmentBarycentricKHR:
             return "FragmentBarycentricKHR";
         case spv::CapabilityTextureSampleWeightedQCOM:
@@ -629,6 +621,8 @@ static inline const char *string_SpvCapability(uint32_t input_value) {
             return "TextureBoxFilterQCOM";
         case spv::CapabilityTextureBlockMatchQCOM:
             return "TextureBlockMatchQCOM";
+        case spv::CapabilityTextureBlockMatch2QCOM:
+            return "TextureBlockMatch2QCOM";
         case spv::CapabilityMeshShadingEXT:
             return "MeshShadingEXT";
         case spv::CapabilityRayTracingOpacityMicromapEXT:
@@ -896,6 +890,7 @@ static inline const char* SpvCapabilityRequirements(uint32_t capability) {
     {spv::CapabilityTextureSampleWeightedQCOM, "VkPhysicalDeviceImageProcessingFeaturesQCOM::textureSampleWeighted"},
     {spv::CapabilityTextureBoxFilterQCOM, "VkPhysicalDeviceImageProcessingFeaturesQCOM::textureBoxFilter"},
     {spv::CapabilityTextureBlockMatchQCOM, "VkPhysicalDeviceImageProcessingFeaturesQCOM::textureBlockMatch"},
+    {spv::CapabilityTextureBlockMatch2QCOM, "VkPhysicalDeviceImageProcessing2FeaturesQCOM::textureBlockMatch2"},
     {spv::CapabilityMeshShadingEXT, "VK_EXT_mesh_shader"},
     {spv::CapabilityRayTracingOpacityMicromapEXT, "VK_EXT_opacity_micromap"},
     {spv::CapabilityCoreBuiltinsARM, "VkPhysicalDeviceShaderCoreBuiltinsFeaturesARM::shaderCoreBuiltins"},
@@ -1003,6 +998,7 @@ static inline std::string SpvExtensionRequirments(std::string_view extension) {
     {"SPV_KHR_expect_assume", {{vvl::Extension::_VK_KHR_shader_expect_assume}}},
     {"SPV_KHR_float_controls2", {{vvl::Extension::_VK_KHR_shader_float_controls2}}},
     {"SPV_KHR_quad_control", {{vvl::Extension::_VK_KHR_shader_quad_control}}},
+    {"SPV_NV_raw_access_chains", {{vvl::Extension::_VK_NV_raw_access_chains}}},
     };
 
     // VUs before catch unknown extensions
