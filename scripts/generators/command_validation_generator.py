@@ -99,7 +99,7 @@ class CommandValidationOutputGenerator(BaseGenerator):
             #include "command_validation.h"
             #include "containers/custom_containers.h"
 
-            extern const char *kVUIDUndefined;
+            extern const char* kVUIDUndefined;
 
             using Func = vvl::Func;
             ''')
