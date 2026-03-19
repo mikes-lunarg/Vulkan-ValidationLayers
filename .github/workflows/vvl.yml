@@ -43,11 +43,8 @@ jobs:
           fetch-depth: '0'
       - name: Install clang-format 22
         run: |
-          wget https://apt.llvm.org/llvm.sh
-          chmod +x llvm.sh
-          sudo ./llvm.sh 22
-          sudo apt-get install -y clang-format-22
-          sudo ln -sf /usr/bin/clang-format-22 /usr/bin/clang-format
+          curl -sL https://github.com/llvm/llvm-project/releases/download/llvmorg-22.1.1/LLVM-22.1.1-Linux-X64.tar.xz | tar -xJ 
+          echo "$PWD/LLVM-22.1.1-Linux-X64/bin" >> $GITHUB_PATH
       - name: clang-format version
         run: clang-format --version
       - name: Execute Source Code Format Checking Script
@@ -461,11 +458,8 @@ jobs:
       - uses: actions/checkout@v6
       - name: Install clang-format 22
         run: |
-          wget https://apt.llvm.org/llvm.sh
-          chmod +x llvm.sh
-          sudo ./llvm.sh 22
-          sudo apt-get install -y clang-format-22
-          sudo ln -sf /usr/bin/clang-format-22 /usr/bin/clang-format
+          curl -sL https://github.com/llvm/llvm-project/releases/download/llvmorg-22.1.1/LLVM-22.1.1-Linux-X64.tar.xz | tar -xJ 
+          echo "$PWD/LLVM-22.1.1-Linux-X64/bin" >> $GITHUB_PATH
       - uses: actions/setup-python@v6
         with:
           python-version: '3.10'
